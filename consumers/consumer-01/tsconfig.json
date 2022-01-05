@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../../dist/consumers/consumer-01",
+    "rootDir": ".",
+  },
+  "references": [
+    { "path": "../../libs/lib-01" },
+    { "path": "../../libs/lib-02" }
+  ]
+}

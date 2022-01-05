@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig-base.json",
+  "files": [],
+  "references": [
+    {
+      "path": "./libs/lib-01"
+    },
+    {
+      "path": "./libs/lib-02"
+    },
+    {
+      "path": "./consumers/consumer-01"
+    },
+    {
+      "path": "./consumers/consumer-02"
+    },
+    {
+      "path": "./apps/app-01"
+    }
+  ]
+}

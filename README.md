@@ -10,6 +10,8 @@ Project root contains 5 **super-projects** which can hold N-projects with desire
 4. **consumers** (bridges, e.g. nats, which may proxy a service call)
 5. **nxcd-types** (input/outputs & service interfaces)
 
+**super-projects** will work like a namespace prefix, like when publishing a library as **@types/node**.
+
 ## Dependency Hierarchies
 
 monolith -> apps -> consumers -> services -> libs -> nxcd-types
@@ -18,6 +20,7 @@ As a rule of thumb, a project can
 
 a. Depend on another project of the super-project. E.g. libs/nxcd-express -> <libs/nxcd-log & libs/nxcd-util>.
 b. Can not depend on a project declared on a super-project *on the left*. E.g., nxcd-types/internal cannot depend on libs/nxcd-logs
+c. Cycles must be avoided. If A depends on B, B must not depend on A. Should the need arises, project C will have to be created to mediate shared dependencies
 
 
 ### Full Tree
@@ -45,7 +48,8 @@ b. Can not depend on a project declared on a super-project *on the left*. E.g., 
 /services
   /accounts
     tsconfig.json       ---> Depends on nxcd-util & nxcd-log & nxcd-types/internal
-    inmem-impl.ts       ---> Mocked (In mem impl)
+    mongo-impl.ts       ---> Mongo impl of AccountService Interface
+    inmem-impl.ts       ---> Mocked (in mem) impl of AccountService Interface
     index.ts            ---> Factory. Exposes only AccountService interface
 /libs
   nxcd-util             ---> No dependencies
@@ -114,7 +118,7 @@ Press F5
 
 ### Module aliasing
 
-To avoid relative paths, every project's *tsconfig.json* must declare aliases associated with directory holding the project references.
+To avoid relative paths in source code, every project's *tsconfig.json* must declare aliases pointing to each super-project associated with project references.
 
 E.g., for app-01, which depends on (nxcd-express, consumer-01, consumer-02)
 
@@ -182,8 +186,8 @@ import { ServiceAccount, AccountStatus, Permission } from '@nxcd-types/internal/
 
 In order to aliasing work flawlessly, there's a bit of a hack and conventions:
 
-1. Aliases for each 'super-project' must be the same in all declarations. E.g., *do not use* '*@nxcd-libs*/(.+)': '<rootDir>/nxcd-libs/$1' in one project and '*@libs*/(.+)': '<rootDir>/nxcd-libs/$1' in another
-2. Transpilation must place .js files in dist/*node_modules*/@<super-project>/project. Why? Because node will always magically resolve stuff in node_modules :). Well, actually when projects are transpiled, the *paths* information is kind of ignored and the js output misses the relative path info and fails.
+1. Aliases for each 'super-project' must be the same in all declarations. E.g., *do not use* '**@nxcd-types**/(.+)': '<rootDir>/nxcd-libs/$1' in one project and '**@my-types**/(.+)': '<rootDir>/nxcd-libs/$1' in another
+2. Transpilation must place .js files in dist/*node_modules*/@<super-project>/project. Why? Because node will always magically resolve stuff in node_modules :). Well, actually when projects are transpiled, the *paths* information is kind of ignored and the javascript output misses the relative path info and fails.
   
 With this convention the final output becomes:
   
@@ -209,14 +213,17 @@ node_modules/
 
 ### Jest Configuration
 
-When running jest (from either debug or npm run test), it only reads the *tsconfig.json* from the root directory. In order to aliasing work, all projects must be mapped in *jest.config.js*:
+When running jest (from either debug or npm run test), it only reads the *tsconfig.json* from the root directory. In order to aliasing work, all super-projects must be mapped in **jest.config.js**:
 
 ```
 module.exports = {
   ...,
   moduleNameMapper: {
-    '@nxcd-libs/(.+)': '<rootDir>/nxcd-libs/$1',
-    '@consumers/(.+)': '<rootDir>/nxcd-libs/$1',
+    '@nxcd-types/(.+)': '<rootDir>/nxcd-types/$1',
+    '@libs/(.+)': '<rootDir>/libs/$1',
+    '@consumers/(.+)': '<rootDir>/consumers/$1',
+    '@services/(.+)': '<rootDir>/services/$1',
+    '@apps/(.+)': '<rootDir>/apps/$1',
   },
   ...
 }

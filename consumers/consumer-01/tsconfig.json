@@ -5,9 +5,8 @@
     "rootDir": ".",
     "baseUrl": "../../",
     "paths": {
-      "@/*": ["*"],
-      "@/tests/*": ["./tests/*"],
-      "@libs/*": ["libs/*"]
+      "@libs/*": ["libs/*"],
+      "@nxcd-types/*": ["nxcd-types/*"]
     }
   },
   "references": [

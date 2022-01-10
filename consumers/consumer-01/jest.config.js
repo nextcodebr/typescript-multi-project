@@ -1,4 +1,8 @@
 module.exports = {
+  displayName: {
+    name: 'consumer-01',
+    color: 'red',
+  },
   collectCoverageFrom: [
     '<rootDir>/**/*.ts',
     '!<rootDir>/apps/**/*.ts'
@@ -15,12 +19,9 @@ module.exports = {
   transform: {
     '\\.ts$': 'ts-jest'
   },
+  moduleNameMapper: {
+    "@libs/(.+)$": "<rootDir>/../../libs/$1"
+  },
   clearMocks: true,
-  projects: [
-    '<rootDir>/libs/nxcd-express/',
-    '<rootDir>/libs/nxcd-log/',
-    '<rootDir>/libs/nxcd-util/',
-    '<rootDir>/consumers/consumer-01/',
-  ],
   verbose: true
 }

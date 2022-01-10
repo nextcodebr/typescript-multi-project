@@ -234,3 +234,90 @@ When running jest (from either debug or npm run test), it only reads the *tsconf
   ...
 }
 ```
+
+However, this only resolves part of the problem: Aliasing in jest will work only if project dependencies are on the same **super-project**.
+  
+E.g. when running 
+  
+```
+consumers/
+  consumer-01/
+    tests/
+      loop.spec.ts
+```
+  
+We get
+
+![image](https://user-images.githubusercontent.com/7014591/148798708-ba06e288-2db0-487f-b000-e12a623140a6.png)
+
+Jest was unable to load a dependency in **another super-project** (**@libs**). To cope with this scenario we are forced to declare a custom *jest config* with **moduleNameMapper** for dependencies in other super-projects.
+
+<pre>
+// consumers/consumer-01/jest.config.js  
+module.exports = {
+  displayName: {
+    name: 'consumer-01',
+    color: 'red',
+  },
+  collectCoverageFrom: [
+    '<rootDir>/**/*.ts',
+    '!<rootDir>/apps/**/*.ts'
+  ],
+  coverageDirectory: 'coverage',
+  coverageProvider: 'babel',
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '<rootDir>/dist/'
+  ],
+  roots: [
+    '<rootDir>/'
+  ],
+  transform: {
+    '\\.ts$': 'ts-jest'
+  },
+  <b>moduleNameMapper: {
+    "@libs/(.+)$": "<rootDir>/../../libs/$1"
+  }</b>,
+  clearMocks: true,
+  verbose: true
+}
+</pre>
+ 
+However the root *jest.config.js* is unaware of this, which forces the use of **projects** property:
+
+<pre>
+// ./jest.config.js
+module.exports = {
+  ...
+  clearMocks: true,
+  <b>projects: [
+    '<rootDir>/consumers/consumer-01/',
+  ]</b>
+}
+</pre>
+
+When issuing `npm run test` from the root we get
+
+![image](https://user-images.githubusercontent.com/7014591/148801004-8a1d92f7-6402-4a79-bb00-bff367115391.png)
+
+Voilà! Oh wait, just 1 test? What happened to the others?
+
+The thing is, once **projects** is declared, jest will ignore the rest of the universe. This forces us to declare all projects containing test cases in the root *jest.config.js*:
+
+<pre>
+// ./jest.config.js
+module.exports = {
+  ...
+  clearMocks: true,
+  <b>projects: [
+    '<rootDir>/libs/nxcd-express/',
+    '<rootDir>/libs/nxcd-log/',
+    '<rootDir>/libs/nxcd-util/',
+    '<rootDir>/consumers/consumer-01/',
+  ]</b>
+}
+</pre>
+
+And each project **must** have a *jest.config.js* of their own, otherwise other nasty things will happen. With this setup we finally get:
+
+![image](https://user-images.githubusercontent.com/7014591/148802054-88ab5da4-1da4-468a-8bce-b1eddafbe7f3.png)

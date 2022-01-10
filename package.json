@@ -6,7 +6,10 @@
   "scripts": {
     "build": "rimraf dist && tsc -b",
     "clean": "rimraf dist",
-    "test": "jest --passWithNoTests --no-cache --runInBand --config jest.config.js"
+    "test": "jest --passWithNoTests --no-cache --runInBand --config jest.config.js",
+    "test:staged": "npm test --listTests --findRelatedTests",
+    "prepare": "husky install",
+    "test:coverage": "npm test -- --coverage"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",

@@ -14,13 +14,13 @@ Project root contains 5 **super-projects** which can hold N-projects with desire
 
 ## Dependency Hierarchies
 
-monolith -> apps -> consumers -> services -> libs -> nxcd-types
+**monolith** -> **apps** -> **consumers** -> **services** -> **libs** -> **nxcd-types**
 
-As a rule of thumb, a project can 
+As a rule of thumb, a project 
 
-a. Depend on another project of the super-project. E.g. libs/nxcd-express -> <libs/nxcd-log & libs/nxcd-util>.
-b. Can not depend on a project declared on a super-project *on the left*. E.g., nxcd-types/internal cannot depend on libs/nxcd-logs
-c. Cycles must be avoided. If A depends on B, B must not depend on A. Should the need arises, project C will have to be created to mediate shared dependencies
+1. Can Depend on another project of the **super-project**. E.g. *libs/nxcd-express* -> [*libs/nxcd-log*, *libs/nxcd-util*]
+2. Can **not** depend on a project declared on a super-project *on the left*. E.g., *nxcd-types/internal* cannot depend on *libs/nxcd-logs*
+3. Can **not** have cycles. If **A** depends on **B**, **B** must not depend on **A**. Should the need arises, project **C** will have to be created to mediate shared dependencies
 
 
 ### Full Tree
@@ -192,38 +192,44 @@ In order to aliasing work flawlessly, there's a bit of a hack and conventions:
 With this convention the final output becomes:
   
 ```
-monolith/
-node_modules/
-  @apps/
-    app-01/
-    app-02/
-  @consumers/
-    consumer-01/
-    consumer-02/
-  @libs/
-    nxcd-express/
-    nxcd-log/
-    nxcd-util/
-  @nxcd-types/
-    internal/
-    public/
-  @services/
-    accounts/
+dist/  
+  monolith/
+  node_modules/
+    @apps/
+      app-01/
+      app-02/
+    @consumers/
+      consumer-01/
+      consumer-02/
+    @libs/
+      nxcd-express/
+      nxcd-log/
+      nxcd-util/
+    @nxcd-types/
+      internal/
+      public/
+    @services/
+      accounts/
 ```
 
 ### Jest Configuration
 
-When running jest (from either debug or npm run test), it only reads the *tsconfig.json* from the root directory. In order to aliasing work, all super-projects must be mapped in **jest.config.js**:
+When running jest (from either debug or npm run test), it only reads the *tsconfig.json* from the root directory. In order to aliasing work, all super-projects must be mapped in the root **tsconfig.json**:
 
 ```
-module.exports = {
-  ...,
-  moduleNameMapper: {
-    '@nxcd-types/(.+)': '<rootDir>/nxcd-types/$1',
-    '@libs/(.+)': '<rootDir>/libs/$1',
-    '@consumers/(.+)': '<rootDir>/consumers/$1',
-    '@services/(.+)': '<rootDir>/services/$1',
-    '@apps/(.+)': '<rootDir>/apps/$1',
+{
+  "extends": "./tsconfig-base.json",
+  "files": [],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["*"],
+      "@/tests/*": ["./tests/*"],
+      "@libs/*": ["libs/*"],
+      "@nxcd-types/*": ["nxcd-types/*"],
+      "@services/*": ["services/*"],
+      "@consumers/*": ["consumers/*"],
+    }
   },
   ...
 }

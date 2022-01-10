@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig-base.json",
   "compilerOptions": {
-    "outDir": "../../dist/node_modules/@nxcd-types/nxcd-express",
+    "outDir": "../../dist/node_modules/@nxcd-types/public",
     "rootDir": ".",
     "baseUrl": "."
   }

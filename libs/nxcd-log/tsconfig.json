@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig-base.json",
   "compilerOptions": {
-    "outDir": "../../dist/libs/lib-02",
+    "outDir": "../../dist/node_modules/@libs/nxcd-log",
     "rootDir": "."
   }
 }

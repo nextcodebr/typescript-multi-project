@@ -8,16 +8,16 @@
     /main.ts             ---> Monolith Entry Point
 /consumers
   /consumer-01
-    /tsconfig.json       ---> Depends on lib-01 & lib-02
+    /tsconfig.json       ---> Depends on nxcd-util & nxcd-log
     /index.ts
-  /consumer-02           ---> Depends on lib-01 & lib-02
+  /consumer-02           ---> Depends on nxcd-util & nxcd-log
     /index.ts
     /tsconfig.json
 /libs
-  lib-01
+  nxcd-util
     /utilities.ts
     /tsconfig.json
-  lib-02
+  nxcd-log
     /log.ts
     /tsconfig.json
 ```
@@ -37,7 +37,7 @@ npm run build
 node dist/apps/app-01/main.js
 ```
 
-#### Debug 
+#### Debug
 ```
 Make sure *Debug Current File* is selected on *RUN AND DEBUG*
 Press F5 file (e.g. apps/app-01/main.ts)
@@ -46,6 +46,6 @@ Press F5 file (e.g. apps/app-01/main.ts)
 #### Debug Unit Test
 ```
 Make sure *Debug Current Jest Test* is selected on *RUN AND DEBUG*
-Press F5 file (e.g. libs/lib-01/tests/utilities.spec.ts)
+Press F5 file (e.g. libs/nxcd-util/tests/utilities.spec.ts)
 ```
 

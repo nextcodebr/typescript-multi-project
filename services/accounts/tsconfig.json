@@ -1,17 +1,19 @@
 {
   "extends": "../../tsconfig-base.json",
   "compilerOptions": {
-    "outDir": "../../dist/node_modules/@consumers/consumer-01",
+    "outDir": "../../dist/node_modules/@services/accounts",
     "rootDir": ".",
     "baseUrl": "../../",
     "paths": {
       "@/*": ["*"],
       "@/tests/*": ["./tests/*"],
-      "@libs/*": ["libs/*"]
+      "@libs/*": ["libs/*"],
+      "@nxcd-types/*": ["nxcd-types/*"]
     }
   },
   "references": [
     { "path": "../../libs/nxcd-util" },
-    { "path": "../../libs/nxcd-log" }
+    { "path": "../../libs/nxcd-log" },
+    { "path": "../../nxcd-types/internal" }
   ]
 }

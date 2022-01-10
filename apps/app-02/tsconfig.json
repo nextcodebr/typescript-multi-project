@@ -1,13 +1,14 @@
 {
   "extends": "../../tsconfig-base.json",
   "compilerOptions": {
-    "outDir": "../../dist/node_modules/@apps/app-01",
+    "outDir": "../../dist/node_modules/@apps/app-02",
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
       "@libs/*": ["../../libs/*"],
       "@consumers/*" : ["../../consumers/*"],
-      "@nxcd-types/*" : ["../../nxcd-types/*"]
+      "@services/*" : ["../../services/*"],
+      "@nxcd-types/*": ["../../nxcd-types/*"],
     }
   },
   "references": [
@@ -19,6 +20,9 @@
     },
     {
       "path": "../../consumers/consumer-02"
+    },
+    {
+      "path": "../../services/accounts"
     }
   ]
 }

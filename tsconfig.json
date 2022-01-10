@@ -1,12 +1,32 @@
 {
   "extends": "./tsconfig-base.json",
   "files": [],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["*"],
+      "@/tests/*": ["./tests/*"],
+      "@libs/*": ["libs/*"],
+      "@nxcd-types/*": ["nxcd-types/*"],
+      "@services/*": ["services/*"],
+      "@consumers/*": ["consumers/*"],
+    }
+  },
   "references": [
     {
-      "path": "./libs/lib-01"
+      "path": "./nxcd-types/internal"
     },
     {
-      "path": "./libs/lib-02"
+      "path": "./nxcd-types/public"
+    },
+    {
+      "path": "./libs/nxcd-util"
+    },
+    {
+      "path": "./libs/nxcd-log"
+    },
+    {
+      "path": "./libs/nxcd-express"
     },
     {
       "path": "./consumers/consumer-01"
@@ -16,6 +36,12 @@
     },
     {
       "path": "./apps/app-01"
+    },
+    {
+      "path": "./apps/app-02"
+    },
+    {
+      "path": "./apps/monolith"
     }
   ]
 }

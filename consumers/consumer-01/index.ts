@@ -1,9 +1,10 @@
-import { uuid, delay } from '../../libs/lib-01/utilities'
-import { log } from '../../libs/lib-02/log'
+import { uuid, delay } from '@libs/nxcd-util/utilities'
+import { logger } from '@libs/nxcd-log/log'
 
-export const runLoop = async () => {
+export const runLoop = async (app: string, sleepMs: number = 1000) => {
     for (; ;) {
-        await delay(1000)
-        log(`consumer-01 ${uuid()}`)
+        await delay(sleepMs)
+        logger.info(`[${app}]consumer-01 ${uuid()}`)
     }
 }
+

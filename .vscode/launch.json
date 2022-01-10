@@ -18,7 +18,18 @@
         "name": "Debug Current Jest Test",
         "type": "node",
         "request": "launch",
-        "runtimeArgs": ["--inspect-brk", "${workspaceRoot}/node_modules/.bin/jest", "${file}", "--config","jest.config.all.js", "--passWithNoTests","--no-cache", "--runInBand", "false", "--testTimeout", "600000","--detectOpenHandles"],
+        "runtimeArgs": ["--inspect-brk", "${workspaceRoot}/node_modules/.bin/jest", "${file}", "--config","jest.config.js", "--passWithNoTests","--no-cache", "--runInBand", "false", "--testTimeout", "600000","--detectOpenHandles"],
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "env": {
+          "NODE_OPTIONS": "--max_old_space_size=2048"
+        }
+      },
+      {
+        "name": "Launch All Tests",
+        "type": "node",
+        "request": "launch",
+        "runtimeArgs": ["--inspect-brk", "${workspaceRoot}/node_modules/.bin/jest", "--config","jest.config.js", "--passWithNoTests","--no-cache", "--runInBand", "false", "--testTimeout", "600000","--detectOpenHandles"],
         "console": "integratedTerminal",
         "internalConsoleOptions": "neverOpen",
         "env": {

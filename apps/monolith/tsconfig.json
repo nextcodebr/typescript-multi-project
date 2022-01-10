@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../../dist/monolith",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@apps/*": ["../*"]
+    }
+  },
+  "references": [
+    {
+      "path": "../app-01"
+    },
+    {
+      "path": "../app-02"
+    }
+  ]
+}

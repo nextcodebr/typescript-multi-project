@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../../dist/node_modules/@libs/nxcd-express",
+    "rootDir": ".",
+    "baseUrl": "../../",
+    "paths": {
+      "@/*": ["*"],
+      "@/tests/*": ["./tests/*"],
+      "@libs/*": ["libs/*"],
+      "@nxcd-types/*": ["nxcd-types/*"]
+    }
+  },
+  "references": [
+    {
+      "path": "../../libs/nxcd-log"
+    },
+    {
+      "path": "../../nxcd-types/internal"
+    }
+  ]
+}
